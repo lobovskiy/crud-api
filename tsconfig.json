@@ -3,14 +3,14 @@
     "target": "es2016",
     "lib": ["esnext"],
     "module": "commonjs",
-    "rootDir": "src",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": "build",
+    "outDir": "dist",
     "esModuleInterop": true,
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["./dist/**/*"]
 }

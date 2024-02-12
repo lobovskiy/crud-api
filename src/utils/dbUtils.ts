@@ -1,10 +1,5 @@
-import { join } from 'path';
 import fsPromises from 'fs/promises';
 import fsp from 'fs/promises';
-
-export function getFilePath(filePath: string) {
-  return join(__dirname, filePath);
-}
 
 export async function readJsonDb<T>(dbFilePath: string): Promise<T[]> {
   const data = await fsPromises.readFile(dbFilePath, 'utf-8');

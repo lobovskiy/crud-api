@@ -7,7 +7,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowJs": true,
-//    "sourceMap": false,
     "outDir": "build",
     "esModuleInterop": true,
     "strict": true,

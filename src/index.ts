@@ -1,14 +1,15 @@
 import http from 'node:http';
 import fs from 'node:fs';
+import { join } from 'path';
 import dotenv from 'dotenv';
-import { getFilePath } from './utils';
+import App from './App';
 import { JSON_DB_PATH } from './consts';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const server = http.createServer();
-const jsonDbFilePath = getFilePath(JSON_DB_PATH);
+const jsonDbFilePath = join(__dirname, JSON_DB_PATH);
 
 const deleteDb = () =>
   fs.unlink(jsonDbFilePath, (err) => {
@@ -27,8 +28,10 @@ const start = () => {
       server.listen(PORT, () => {
         console.log(`Server is listening on the port ${PORT}`);
       });
-      server.on('request', (req, res) => {
-        console.log(req, res);
+      server.on('request', async (req, res) => {
+        const app = new App(jsonDbFilePath);
+
+        await app.handleHttpRequest(req, res);
       });
       process.on('SIGINT', () => {
         deleteDb();

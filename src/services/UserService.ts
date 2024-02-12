@@ -1,4 +1,4 @@
-import { readJsonDb, updateJsonDb } from '../utils';
+import { readJsonDb, updateJsonDb } from '../utils/dbUtils';
 import { IUser, UserData } from '../types';
 import { User } from '../models/User';
 

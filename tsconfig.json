@@ -4,6 +4,7 @@
     "lib": ["esnext"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "rootDir": "src",
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": "dist",
@@ -12,5 +13,6 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "exclude": ["./dist/**/*", "jest.config.ts", "./__tests__/**/*"]
+  "include": ["src"],
+  "exclude": ["./dist/**/*", "jest.config.ts", "./__tests__/**/*", "./__mocks__/**/*"]
 }

@@ -1,0 +1,24 @@
+## compiled output
+/dist
+/coverage
+/tmp
+/out-tsc
+
+## dependencies
+/node_modules
+
+## IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+
+# auto-generated files
+/package-lock.json
+/yarn.lock
+/tsconfig.*
+jest.config.ts

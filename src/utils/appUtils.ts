@@ -27,29 +27,28 @@ export function validateUserData(object: unknown): object is UserData {
   if (
     typeof object === 'object' &&
     object !== null &&
-    object.hasOwnProperty('age') &&
     object.hasOwnProperty('username') &&
+    object.hasOwnProperty('age') &&
     object.hasOwnProperty('hobbies')
   ) {
     const { age, username, hobbies } = object as {
-      age: unknown;
       username: unknown;
+      age: unknown;
       hobbies: unknown;
     };
 
-    if (typeof age !== 'number' || age <= 0) {
-      return false;
+    if (
+      !!username &&
+      typeof username === 'string' &&
+      username.trim() !== '' &&
+      !!age &&
+      typeof age === 'number' &&
+      age > 0 &&
+      !!hobbies &&
+      Array.isArray(hobbies)
+    ) {
+      return true;
     }
-
-    if (typeof username !== 'string' || username.trim() === '') {
-      return false;
-    }
-
-    if (!Array.isArray(hobbies)) {
-      return false;
-    }
-
-    return true;
   }
 
   return false;

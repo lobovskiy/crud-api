@@ -1,15 +1,17 @@
 import http from 'node:http';
 import fs from 'node:fs';
-import { join } from 'node:path';
 import dotenv from 'dotenv';
+import { getFilePath } from './utils';
+import { JSON_DB_PATH } from './consts';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const server = http.createServer();
+const jsonDbFilePath = getFilePath(JSON_DB_PATH);
 
 const deleteDb = () =>
-  fs.unlink(join(__dirname, 'db.json'), (err) => {
+  fs.unlink(jsonDbFilePath, (err) => {
     if (err) {
       throw err;
     } else {
@@ -17,8 +19,8 @@ const deleteDb = () =>
     }
   });
 
-const createDb = () =>
-  fs.writeFile(join(__dirname, 'db.json'), '[]', (err) => {
+const start = () => {
+  fs.writeFile(jsonDbFilePath, '[]', (err) => {
     if (err) {
       throw err;
     } else {
@@ -33,5 +35,6 @@ const createDb = () =>
       });
     }
   });
+};
 
-createDb();
+start();

@@ -2,6 +2,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from 'url';
 import UserService from './services/UserService';
 import {
+  parseIdFromUrl,
   validatePathname,
   validateUserData,
   validateUuid,
@@ -17,7 +18,7 @@ export default class App {
   }
 
   async get(url: URL, res: ServerResponse) {
-    const userId = url.pathname;
+    const userId = parseIdFromUrl(BASE_URL, url.pathname);
 
     if (userId) {
       if (validateUuid(userId)) {
@@ -65,7 +66,7 @@ export default class App {
   }
 
   async put(url: URL, req: IncomingMessage, res: ServerResponse) {
-    const userId = url.pathname;
+    const userId = parseIdFromUrl(BASE_URL, url.pathname);
 
     if (userId) {
       if (validateUuid(userId)) {
@@ -100,7 +101,7 @@ export default class App {
   }
 
   async delete(url: URL, req: IncomingMessage, res: ServerResponse) {
-    const userId = url.pathname;
+    const userId = parseIdFromUrl(BASE_URL, url.pathname);
 
     if (userId) {
       if (validateUuid(userId)) {

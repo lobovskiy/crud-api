@@ -8,14 +8,12 @@ export function validatePathname(baseUrl: string, path?: string) {
   return path.startsWith(baseUrl);
 }
 
-export function parseIdFromUrl(url?: string) {
-  if (!url) {
+export function parseIdFromUrl(baseurl: string, path?: string) {
+  if (!path || !path.startsWith(baseurl)) {
     return null;
   }
 
-  const userId = url.replace('/api/users', '');
-
-  return userId.length > 1 ? userId.slice(1) : null;
+  return path.slice(`${baseurl}/`.length);
 }
 
 export function validateUuid(id: string) {

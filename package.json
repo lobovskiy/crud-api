@@ -9,6 +9,7 @@
     "build": "npx tsc",
     "start:dev": "nodemon ./src/index.ts",
     "start:prod": "tsc && node ./dist/index.js",
+    "start:multi": "nodemon src/balancer.ts",
     "test": "jest"
   },
   "repository": {

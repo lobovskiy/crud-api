@@ -23,6 +23,16 @@ export function validateUuid(id: string) {
   return regExpUuid.test(id);
 }
 
+export function isJsonString(str: string) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
+
 export function validateUserData(object: unknown): object is UserData {
   if (
     typeof object === 'object' &&

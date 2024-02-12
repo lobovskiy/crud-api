@@ -2,6 +2,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from 'url';
 import UserService from './services/UserService';
 import {
+  isJsonString,
   parseIdFromUrl,
   validatePartialUserData,
   validatePathname,
@@ -52,12 +53,18 @@ export default class App {
     });
 
     req.on('end', async () => {
-      const body = JSON.parse(data);
+      if (isJsonString(data)) {
+        const body = JSON.parse(data);
 
-      if (validateUserData(body)) {
-        const newUser = await this.userService.create(body);
+        if (validateUserData(body)) {
+          const newUser = await this.userService.create(body);
 
-        sendResponse(res, 201, newUser);
+          sendResponse(res, 201, newUser);
+        } else {
+          sendResponse(res, 400, {
+            error: 'Bad request',
+          });
+        }
       } else {
         sendResponse(res, 400, {
           error: 'Bad request',
@@ -78,16 +85,22 @@ export default class App {
         });
 
         req.on('end', async () => {
-          const body = JSON.parse(data);
+          if (isJsonString(data)) {
+            const body = JSON.parse(data);
 
-          if (validatePartialUserData(body)) {
-            const newUser = await this.userService.update(userId, body);
+            if (validatePartialUserData(body)) {
+              const newUser = await this.userService.update(userId, body);
 
-            if (newUser) {
-              sendResponse(res, 200, newUser);
+              if (newUser) {
+                sendResponse(res, 200, newUser);
+              } else {
+                sendResponse(res, 404, {
+                  error: `Not found`,
+                });
+              }
             } else {
-              sendResponse(res, 404, {
-                error: `Not found`,
+              sendResponse(res, 400, {
+                error: 'Bad request',
               });
             }
           } else {

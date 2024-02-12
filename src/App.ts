@@ -27,7 +27,7 @@ export default class App {
           sendResponse(res, 200, user);
         } else {
           sendResponse(res, 404, {
-            error: `User ${userId} not found`,
+            error: `Not found`,
           });
         }
       } else {
@@ -64,6 +64,69 @@ export default class App {
     });
   }
 
+  async put(url: URL, req: IncomingMessage, res: ServerResponse) {
+    const userId = url.pathname;
+
+    if (userId) {
+      if (validateUuid(userId)) {
+        let data: string = '';
+
+        req.on('data', (dataChunk) => {
+          data += dataChunk;
+        });
+
+        req.on('end', async () => {
+          const body = JSON.parse(data);
+          const newUser = await this.userService.update(userId, body);
+
+          if (newUser) {
+            sendResponse(res, 200, newUser);
+          } else {
+            sendResponse(res, 404, {
+              error: `Not found`,
+            });
+          }
+        });
+      } else {
+        sendResponse(res, 400, {
+          error: 'Bad request',
+        });
+      }
+    } else {
+      sendResponse(res, 404, {
+        error: `Not found`,
+      });
+    }
+  }
+
+  async delete(url: URL, req: IncomingMessage, res: ServerResponse) {
+    const userId = url.pathname;
+
+    if (userId) {
+      if (validateUuid(userId)) {
+        const deletedUser = await this.userService.delete(userId);
+
+        if (deletedUser) {
+          sendResponse(res, 204, {
+            message: 'User deleted',
+          });
+        } else {
+          sendResponse(res, 404, {
+            error: 'Not found',
+          });
+        }
+      } else {
+        sendResponse(res, 400, {
+          error: 'Bad request',
+        });
+      }
+    } else {
+      sendResponse(res, 404, {
+        error: `Not found`,
+      });
+    }
+  }
+
   async handleHttpRequest(req: IncomingMessage, res: ServerResponse) {
     try {
       const { method } = req;
@@ -87,6 +150,14 @@ export default class App {
           break;
         case 'POST':
           await this.post(req, res);
+
+          break;
+        case 'PUT':
+          await this.put(url, req, res);
+
+          break;
+        case 'DELETE':
+          await this.delete(url, req, res);
 
           break;
 

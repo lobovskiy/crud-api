@@ -3,6 +3,7 @@ import { URL } from 'url';
 import UserService from './services/UserService';
 import {
   parseIdFromUrl,
+  validatePartialUserData,
   validatePathname,
   validateUserData,
   validateUuid,
@@ -78,13 +79,20 @@ export default class App {
 
         req.on('end', async () => {
           const body = JSON.parse(data);
-          const newUser = await this.userService.update(userId, body);
 
-          if (newUser) {
-            sendResponse(res, 200, newUser);
+          if (validatePartialUserData(body)) {
+            const newUser = await this.userService.update(userId, body);
+
+            if (newUser) {
+              sendResponse(res, 200, newUser);
+            } else {
+              sendResponse(res, 404, {
+                error: `Not found`,
+              });
+            }
           } else {
-            sendResponse(res, 404, {
-              error: `Not found`,
+            sendResponse(res, 400, {
+              error: 'Bad request',
             });
           }
         });

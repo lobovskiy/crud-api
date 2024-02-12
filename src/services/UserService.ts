@@ -1,5 +1,5 @@
 import { readJsonDb, updateJsonDb } from '../utils/dbUtils';
-import { IUser, UserData } from '../types';
+import { AtLeastOnePropOf, IUser, UserData } from '../types';
 import { User } from '../models/User';
 
 export default class UserService {
@@ -25,7 +25,7 @@ export default class UserService {
     return newUser;
   }
 
-  public async update(id: string, data: UserData) {
+  public async update(id: string, data: AtLeastOnePropOf<UserData>) {
     const users = await this.get();
     const index = users.findIndex((user) => user.id === id);
 

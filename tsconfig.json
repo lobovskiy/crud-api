@@ -12,5 +12,5 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "exclude": ["./dist/**/*"]
+  "exclude": ["./dist/**/*", "jest.config.ts", "./__tests__/**/*"]
 }

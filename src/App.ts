@@ -1,7 +1,11 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from 'url';
 import UserService from './services/UserService';
-import { validatePathname, validateUuid } from './utils/appUtils';
+import {
+  validatePathname,
+  validateUserData,
+  validateUuid,
+} from './utils/appUtils';
 import { sendResponse } from './utils/httpUtils';
 import { BASE_URL } from './consts';
 
@@ -12,7 +16,7 @@ export default class App {
     this.userService = new UserService(jsonDbFilePath);
   }
 
-  async get(url: URL, req: IncomingMessage, res: ServerResponse) {
+  async get(url: URL, res: ServerResponse) {
     const userId = url.pathname;
 
     if (userId) {
@@ -38,6 +42,28 @@ export default class App {
     }
   }
 
+  async post(req: IncomingMessage, res: ServerResponse) {
+    let data = '';
+
+    req.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    req.on('end', async () => {
+      const body = JSON.parse(data);
+
+      if (validateUserData(body)) {
+        const newUser = await this.userService.create(body);
+
+        sendResponse(res, 201, newUser);
+      } else {
+        sendResponse(res, 400, {
+          error: 'Bad request',
+        });
+      }
+    });
+  }
+
   async handleHttpRequest(req: IncomingMessage, res: ServerResponse) {
     try {
       const { method } = req;
@@ -56,7 +82,11 @@ export default class App {
 
       switch (method) {
         case 'GET':
-          await this.get(url, req, res);
+          await this.get(url, res);
+
+          break;
+        case 'POST':
+          await this.post(req, res);
 
           break;
 

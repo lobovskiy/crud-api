@@ -7,7 +7,7 @@ import { JSON_DB_PATH } from './consts';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const server = http.createServer();
 const jsonDbFilePath = join(__dirname, JSON_DB_PATH);
 const app = new App(jsonDbFilePath);

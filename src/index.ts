@@ -10,6 +10,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const server = http.createServer();
 const jsonDbFilePath = join(__dirname, JSON_DB_PATH);
+const app = new App(jsonDbFilePath);
 
 const deleteDb = () =>
   fs.unlink(jsonDbFilePath, (err) => {
@@ -29,8 +30,6 @@ const start = () => {
         console.log(`Server is listening on the port ${PORT}`);
       });
       server.on('request', async (req, res) => {
-        const app = new App(jsonDbFilePath);
-
         await app.handleHttpRequest(req, res);
       });
       process.on('SIGINT', () => {
